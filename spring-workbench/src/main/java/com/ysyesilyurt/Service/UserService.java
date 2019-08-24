@@ -30,4 +30,19 @@ public class UserService {
         return userDao.getAllUsers();
     }
 
+    public User getUserById(int id) {
+        return userDao.getUserById(id);
+    }
+
+    public boolean updateUserById(int id, User updatedCredentials) {
+        return userDao.updateUserById(id, updatedCredentials);
+    }
+
+    public int createUser(User userCredentials) {
+        return userDao.createUser(userCredentials);
+    }
+
+    public boolean deleteUserById(int id) {
+        return userDao.deleteUserById(id);
+    }
 }

@@ -50,4 +50,51 @@ public class UserDao {
         return this.users.values();
     }
 
+    public User getUserById(int id) {
+        return this.users.get(id);
+    }
+
+    public boolean updateUserById(int id, User updatedCredentials) {
+        try {
+            User user = this.users.get(id);
+            user.setName(updatedCredentials.getName());
+            user.setProfession(updatedCredentials.getProfession());
+            user.setAge(updatedCredentials.getAge());
+            return true;
+        }
+        catch (NullPointerException e) {
+            System.out.println(String.format("Error in UserDAO: No such user with id %d", id));
+            return false;
+        }
+    }
+
+    public int createUser(User userCredentials) {
+        try {
+            Integer id = userCredentials.getId();
+            if (id == 0)
+                id = getNextAvailableId();
+            User user = new User(id, userCredentials.getName(), userCredentials.getProfession(), userCredentials.getAge());
+            this.users.put(id, user);
+            return id;
+        }
+        catch (Exception e) {
+            System.out.println(String.format("Error in UserDAO: %s", e));
+            return -1;
+        }
+    }
+
+    public boolean deleteUserById(int id) {
+        try {
+            users.remove(id);
+            return true;
+        }
+        catch (NullPointerException e) {
+            System.out.println(String.format("Error in UserDAO: No such user with id %d", id));
+            return false;
+        }
+    }
+
+    private int getNextAvailableId() {
+        return Collections.max(this.users.keySet()) + 1;
+    }
 }
