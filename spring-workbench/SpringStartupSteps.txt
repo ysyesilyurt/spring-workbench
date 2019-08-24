@@ -1,0 +1,46 @@
+Initializing Steps for a new SpringBoot project:
+    1- Create a new "Maven" project from Intellij (make sure you are using a Java version >= 8)
+    2- GroupId = (this entry generally goes by com.yourdomain or com.yourname) com.ysyesilyurt
+       ArtifactId = (enter name of your actual project) springWorkbench
+       ProjectName = springWorkbench
+
+    By now you should have a structure as the following:
+        └── src
+            └── main
+                └── java
+                    (└── Actual package gonna be in here)
+                └── resources
+
+    3- Now go and paste the below information to your pom.xml to add the spring in your dependencies.
+       (Beware, java-version is 1.8 in below, change if you use another version.)
+
+        <parent>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-parent</artifactId>
+            <version>2.1.6.RELEASE</version>
+        </parent>
+
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+            </dependency>
+        </dependencies>
+
+        <properties>
+            <java.version>1.8</java.version>
+        </properties>
+
+
+        <build>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                </plugin>
+            </plugins>
+        </build>
+
+    As soon as you handle your pom.xml Intellij will resolve your dependencies and start to download any if it needs to.
+
+    4- Now start the implementation with creating a package named "com.ysyesilyurt" under "springWorkbench/src/main/java/"
