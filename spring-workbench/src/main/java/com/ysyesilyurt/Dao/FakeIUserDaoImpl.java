@@ -1,6 +1,7 @@
 package com.ysyesilyurt.Dao;
 
 import com.ysyesilyurt.EntityModel.User;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
@@ -8,10 +9,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static java.util.Map.entry;
-
 @Repository
-public class UserDao {
+@Qualifier("fake-data")
+public class FakeIUserDaoImpl implements IUserDao {
 
     private static Map<Integer, User> users;
 
@@ -46,14 +46,17 @@ public class UserDao {
 //        );
     }
 
+    @Override
     public Collection<User> getAllUsers() {
         return this.users.values();
     }
 
+    @Override
     public User getUserById(int id) {
         return this.users.get(id);
     }
 
+    @Override
     public boolean updateUserById(int id, User updatedCredentials) {
         try {
             User user = this.users.get(id);
@@ -68,6 +71,7 @@ public class UserDao {
         }
     }
 
+    @Override
     public int createUser(User userCredentials) {
         try {
             Integer id = userCredentials.getId();
@@ -83,6 +87,7 @@ public class UserDao {
         }
     }
 
+    @Override
     public boolean deleteUserById(int id) {
         try {
             users.remove(id);
@@ -97,4 +102,5 @@ public class UserDao {
     private int getNextAvailableId() {
         return Collections.max(this.users.keySet()) + 1;
     }
+
 }

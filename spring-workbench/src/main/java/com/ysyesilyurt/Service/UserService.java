@@ -1,8 +1,9 @@
 package com.ysyesilyurt.Service;
 
-import com.ysyesilyurt.Dao.UserDao;
+import com.ysyesilyurt.Dao.IUserDao;
 import com.ysyesilyurt.EntityModel.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -16,7 +17,8 @@ public class UserService {
     *   Spring will find an instance of that bean and inject it in here.
     * */
     @Autowired  /* Field Injection */
-    private UserDao userDao;
+    @Qualifier("fake-data") /* Using DAO implementation of fake data */
+    private IUserDao IUserDao;
 
     /*
     *  If I were not to make Dao a Repository (a Component/Bean) Then I would need sth like following:
@@ -27,22 +29,22 @@ public class UserService {
     * */
 
     public Collection<User> getAllUsers() {
-        return userDao.getAllUsers();
+        return IUserDao.getAllUsers();
     }
 
     public User getUserById(int id) {
-        return userDao.getUserById(id);
+        return IUserDao.getUserById(id);
     }
 
     public boolean updateUserById(int id, User updatedCredentials) {
-        return userDao.updateUserById(id, updatedCredentials);
+        return IUserDao.updateUserById(id, updatedCredentials);
     }
 
     public int createUser(User userCredentials) {
-        return userDao.createUser(userCredentials);
+        return IUserDao.createUser(userCredentials);
     }
 
     public boolean deleteUserById(int id) {
-        return userDao.deleteUserById(id);
+        return IUserDao.deleteUserById(id);
     }
 }
