@@ -1,6 +1,7 @@
 package com.ysyesilyurt.Dao;
 
 import com.ysyesilyurt.EntityModel.User;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +12,7 @@ import java.util.Map;
 
 @Repository
 @Qualifier("fake-data")
+// @AllArgsConstructor -> dont need this since we dont have a member that needs to be initialized
 public class FakeIUserDaoImpl implements IUserDao {
 
     private static Map<Integer, User> users;

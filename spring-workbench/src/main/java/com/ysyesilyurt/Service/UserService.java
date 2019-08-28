@@ -18,7 +18,7 @@ public class UserService {
     * */
     @Autowired  /* Field Injection */
     @Qualifier("fake-data") /* Using DAO implementation of fake data */
-    private IUserDao IUserDao;
+    private IUserDao UserDao;
 
     /*
     *  If I were not to make Dao a Repository (a Component/Bean) Then I would need sth like following:
@@ -29,22 +29,22 @@ public class UserService {
     * */
 
     public Collection<User> getAllUsers() {
-        return IUserDao.getAllUsers();
+        return UserDao.getAllUsers();
     }
 
     public User getUserById(int id) {
-        return IUserDao.getUserById(id);
+        return UserDao.getUserById(id);
     }
 
     public boolean updateUserById(int id, User updatedCredentials) {
-        return IUserDao.updateUserById(id, updatedCredentials);
+        return UserDao.updateUserById(id, updatedCredentials);
     }
 
     public int createUser(User userCredentials) {
-        return IUserDao.createUser(userCredentials);
+        return UserDao.createUser(userCredentials);
     }
 
     public boolean deleteUserById(int id) {
-        return IUserDao.deleteUserById(id);
+        return UserDao.deleteUserById(id);
     }
 }

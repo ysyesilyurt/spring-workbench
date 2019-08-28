@@ -1,6 +1,7 @@
 package com.ysyesilyurt.Dao;
 
 import com.ysyesilyurt.EntityModel.User;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
@@ -8,6 +9,7 @@ import java.util.Collection;
 
 @Repository
 @Qualifier("mysql-data")
+// @AllArgsConstructor
 public class MysqlDaoImpl implements IUserDao {
 
     @Override
