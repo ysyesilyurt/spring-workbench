@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 @Setter
 @Entity
 @Table(name = "post")
-public class Post extends AuditModel{
+public class PostEntityModel extends AuditModel{
 
     @Id // Specifies the primary key of an entity.
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Specification of generation strategies for the values of primary keys.
@@ -25,12 +25,21 @@ public class Post extends AuditModel{
     private String title;
 
     @NotNull
+    @Size(max = 30)
+    @Column(name = "category", nullable = false)
+    private String category; // TODO: change category to ENUM
+
+
     @Size(max = 300)
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", nullable = true)
     private String description;
 
     @NotNull
     @Lob // Means currently annotated entity attribute represents a large object type.
     @Column(name = "content")
     private String content;
+
+    /*
+        TODO: Access Comment also from here -- OneToMany -- .. continued
+     */
 }

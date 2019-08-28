@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 @Entity
 @Table(name = "comment")
-public class Comment extends AuditModel {
+public class CommentEntityModel extends AuditModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,8 +26,8 @@ public class Comment extends AuditModel {
     private String text;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false) // to declare that it has a many-to-one relationship with the Post entity
-    @JoinColumn(name = "post_id", nullable = false) // to declare the foreign key column and name it on comment table
+    @JoinColumn(name = "post_id", nullable = false) // to declare the foreign key column and name it on comment table // TODO: change post_id to postID or sth. check it
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore // to ignore the post on serialization and deserialization
-    private Post post;
+    // @JsonIgnore // to ignore the post object as a field of comment object in JSON values of comment
+    private PostEntityModel post;
 }
