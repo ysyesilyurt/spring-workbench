@@ -1,7 +1,8 @@
 {
 	"info": {
 		"_postman_id": "f958ac8c-ce98-4a0f-97b8-9a1999223e3c",
-		"name": "springWorkbench",
+		"name": "spring-workbench-1",
+		"description": "Contains requests used to test workbench-1\nysyesilyurt - 05.29.19",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -131,6 +132,28 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "6b718a78-a7bf-46ff-b758-54ae7d2ed154",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "fceaeabe-4a3d-4374-8ed7-c7b3f01ac27a",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }
