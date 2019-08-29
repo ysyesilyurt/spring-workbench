@@ -20,24 +20,27 @@ public class PostService {
         this.postRepository = postRepository;
     }
 
-    public Page<PostEntityModel> getAllPosts(Pageable pageable) {
-        return postRepository.findAll(pageable);
+    public Page<PostEntityModel> getAllPosts(String title, String category, Pageable pageable) {
+        /* As you can see below code is just nasty ifology and creates method explosion in the repository since the
+        *  Optionality of Request Parameters
+        *
+        *  To address to this issue we will introduce search API with Spring Data and Specification Argument Resolver
+        *  in the next spring-workbench (spring-workbench-3)
+        *  */
+
+        if (title != null && category != null)
+            return postRepository.findByTitleAndCategory(title, category, pageable);
+        else if (category != null)
+            return postRepository.findByCategory(category, pageable);
+        else if (title != null)
+            return postRepository.findByTitle(title, pageable);
+        else
+            return postRepository.findAll(pageable);
     }
 
     public PostEntityModel getPostById(Long postId) {
         return postRepository.findById(postId)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("PostId %ld not found.", postId)));
-    }
-
-    public PostEntityModel getPostByTitle(String title) {
-        // Since titles are unique this method will only return 1 object or throw RNFE
-        return postRepository.findByTitle(title)
-                .orElseThrow(() -> new ResourceNotFoundException(String.format("Post %s not found.", title)));
-    }
-
-    public Page<PostEntityModel> getPostsByCategory(String category, Pageable pageable) {
-        // Since same categories can be assigned to multiple posts this method may return 1 or more object
-        return postRepository.findByCategory(category, pageable);
+                .orElseThrow(() -> new ResourceNotFoundException(String.format("PostId %d not found.", postId)));
     }
 
     public PostEntityModel createPost(PostEntityModel post) {
@@ -50,12 +53,16 @@ public class PostService {
          * */
         return postRepository.findById(postId).map(postEntityModel -> {
             // User can not update post's id
-            postEntityModel.setTitle(postUpdatedCredentials.getTitle());
-            postEntityModel.setDescription(postUpdatedCredentials.getDescription());
-            postEntityModel.setContent(postUpdatedCredentials.getContent());
-            postEntityModel.setCategory(postUpdatedCredentials.getCategory());
+            if (postUpdatedCredentials.getTitle() != null)
+                postEntityModel.setTitle(postUpdatedCredentials.getTitle());
+            if (postUpdatedCredentials.getDescription() != null)
+                postEntityModel.setDescription(postUpdatedCredentials.getDescription());
+            if (postUpdatedCredentials.getContent() != null)
+                postEntityModel.setContent(postUpdatedCredentials.getContent());
+            if (postUpdatedCredentials.getCategory() != null)
+                postEntityModel.setCategory(postUpdatedCredentials.getCategory());
             return postRepository.save(postEntityModel);
-        }).orElseThrow(() -> new ResourceNotFoundException(String.format("PostId %ld not found, " +
+        }).orElseThrow(() -> new ResourceNotFoundException(String.format("PostId %d not found, " +
                 "could not update Post", postId)));
     }
 
@@ -63,7 +70,7 @@ public class PostService {
         return postRepository.findById(postId).map(postEntityModel -> {
             postRepository.delete(postEntityModel);
             return ResponseEntity.ok().build();
-        }).orElseThrow(() -> new ResourceNotFoundException(String.format("PostId %ld not found, " +
+        }).orElseThrow(() -> new ResourceNotFoundException(String.format("PostId %d not found, " +
                 "could not delete Post", postId)));
 
         // TODO: try ifPresent
