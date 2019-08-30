@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
 public class PostService {
 
@@ -44,7 +46,7 @@ public class PostService {
     }
 
     public PostEntityModel createPost(PostEntityModel post) {
-        return postRepository.save(post);
+        return this.persistPost(post);
     }
 
     public PostEntityModel updatePost(Long postId, PostEntityModel postUpdatedCredentials) {
@@ -61,11 +63,12 @@ public class PostService {
                 postEntityModel.setContent(postUpdatedCredentials.getContent());
             if (postUpdatedCredentials.getCategory() != null)
                 postEntityModel.setCategory(postUpdatedCredentials.getCategory());
-            return postRepository.save(postEntityModel);
+            return this.persistPost(postEntityModel);
         }).orElseThrow(() -> new ResourceNotFoundException(String.format("PostId %d not found, " +
                 "could not update Post", postId)));
     }
 
+    @Transactional
     public ResponseEntity<?> deletePost(Long postId) {
         return postRepository.findById(postId).map(postEntityModel -> {
             postRepository.delete(postEntityModel);
@@ -74,5 +77,10 @@ public class PostService {
                 "could not delete Post", postId)));
 
         // TODO: try ifPresent
+    }
+
+    @Transactional
+    private PostEntityModel persistPost(PostEntityModel post) {
+        return postRepository.save(post);
     }
 }

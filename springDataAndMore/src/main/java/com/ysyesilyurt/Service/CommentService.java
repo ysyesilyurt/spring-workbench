@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
@@ -42,7 +43,7 @@ public class CommentService {
     public CommentEntityModel createComment(Long postId, CommentEntityModel commentEntityModel) {
         return postRepository.findById(postId).map(postEntityModel -> {
             commentEntityModel.setPost(postEntityModel);
-            return commentRepository.save(commentEntityModel);
+            return this.persistComment(commentEntityModel);
         }).orElseThrow(() -> new ResourceNotFoundException(String.format("PostId %d not found, " +
                 "could not create Comment under this post.", postId)));
     }
@@ -59,19 +60,20 @@ public class CommentService {
             return commentRepository.findById(commentId).map(commentEntityModel -> {
                 // User can not update comment's id and post
                 commentEntityModel.setText(commentUpdatedCredentials.getText());
-                return commentRepository.save(commentEntityModel);
+                return persistComment(commentEntityModel);
             }).orElseThrow(() -> new ResourceNotFoundException(String.format("Comment not found with id %d, " +
                     "could not update Comment under this post.", commentId)));
             /* Alternative way */
 //          return commentRepository.findByIdAndPostId(commentId, postId).map(commentEntityModel -> {
 //                commentEntityModel.setText(commentUpdatedCredentials.getText());
-//                return commentRepository.save(commentEntityModel);
+//                return persistComment(commentEntityModel);
 //          }).orElseThrow(() -> new ResourceNotFoundException(String.format("Comment not found with id %d, " +
 //                  "could not update Comment under this post.", commentId)));
 
         }
     }
 
+    @Transactional
     public ResponseEntity<?> deleteComment(Long postId, Long commentId) {
         /* First way to do it */
         return commentRepository.findById(commentId).map(commentEntityModel -> {
@@ -87,4 +89,8 @@ public class CommentService {
 //                "could not update Comment under this post.", commentId)));
     }
 
+    @Transactional
+    private CommentEntityModel persistComment(CommentEntityModel comment) {
+        return commentRepository.save(comment);
+    }
 }
