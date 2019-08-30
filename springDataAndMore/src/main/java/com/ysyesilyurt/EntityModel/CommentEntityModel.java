@@ -25,9 +25,10 @@ public class CommentEntityModel extends AuditModel {
     @Column(name = "text")
     private String text;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false) // to declare that it has a many-to-one relationship with the Post entity
-    @JoinColumn(name = "post_id", nullable = false) // to declare the foreign key column and name it on comment table // TODO: change post_id to postID or sth. check it
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JsonIgnore // to ignore the post object as a field of comment object in JSON values of comment
-    private PostEntityModel post;
+//    @JsonIgnore // to ignore the post object as a field of comment object in JSON
+    @ManyToOne(fetch = FetchType.LAZY, optional = false) // to declare that it has a many-to-one relationship
+    @JoinColumn(name = "post_id", nullable = false) // name of the primary key of Post table in Comment table (btw name of the column does not imply any tiny relation on the relationship between entities)
+    @OnDelete(action = OnDeleteAction.CASCADE) /* cascade on delete -- delete comments of a post when post gets deleted. */
+    private PostEntityModel post; /* With providing the entity model's type here, Hibernate resolves that this
+                                     relationship is between host model (comment) and this variable's model (post) */
 }

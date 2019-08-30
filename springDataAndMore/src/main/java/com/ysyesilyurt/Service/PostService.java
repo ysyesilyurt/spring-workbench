@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
 
 @Service
 public class PostService {
@@ -40,43 +41,53 @@ public class PostService {
             return postRepository.findAll(pageable);
     }
 
+    /*
+        Only methods with database update needs @Transactional annotation others (getters) does not need it.
+        So we dont use anything for these getters. We can also use @Transactional(readOnly=true) for them
+        as this annotation forbids any update on db and does NOT LOCK database tables as process happens.
+     */
+
     public PostEntityModel getPostById(Long postId) {
         return postRepository.findById(postId)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format("PostId %d not found.", postId)));
     }
 
-    public PostEntityModel createPost(PostEntityModel post) {
-        return this.persistPost(post);
+    public PostEntityModel createPost(PostEntityModel newPost) {
+        return this.persistPost(newPost);
     }
 
     public PostEntityModel updatePost(Long postId, PostEntityModel postUpdatedCredentials) {
         /* We simply retrieve the post if exists (or else we throw our own not found exception) and update it
            inside Optional.map with a dummy instance "postEntityModel", then we save it and return the updated object
          * */
-        return postRepository.findById(postId).map(postEntityModel -> {
+        return postRepository.findById(postId).map(postToUpdate -> {
             // User can not update post's id
             if (postUpdatedCredentials.getTitle() != null)
-                postEntityModel.setTitle(postUpdatedCredentials.getTitle());
+                postToUpdate.setTitle(postUpdatedCredentials.getTitle());
             if (postUpdatedCredentials.getDescription() != null)
-                postEntityModel.setDescription(postUpdatedCredentials.getDescription());
+                postToUpdate.setDescription(postUpdatedCredentials.getDescription());
             if (postUpdatedCredentials.getContent() != null)
-                postEntityModel.setContent(postUpdatedCredentials.getContent());
+                postToUpdate.setContent(postUpdatedCredentials.getContent());
             if (postUpdatedCredentials.getCategory() != null)
-                postEntityModel.setCategory(postUpdatedCredentials.getCategory());
-            return this.persistPost(postEntityModel);
+                postToUpdate.setCategory(postUpdatedCredentials.getCategory());
+            return this.persistPost(postToUpdate);
         }).orElseThrow(() -> new ResourceNotFoundException(String.format("PostId %d not found, " +
                 "could not update Post", postId)));
     }
 
     @Transactional
     public ResponseEntity<?> deletePost(Long postId) {
-        return postRepository.findById(postId).map(postEntityModel -> {
-            postRepository.delete(postEntityModel);
+        return postRepository.findById(postId).map(postToDelete -> {
+            postRepository.delete(postToDelete);
             return ResponseEntity.ok().build();
         }).orElseThrow(() -> new ResourceNotFoundException(String.format("PostId %d not found, " +
                 "could not delete Post", postId)));
 
-        // TODO: try ifPresent
+        /* Second Alternative with ifPresent -- but not able to throw exception in this way
+        *  (Since ifPresent also returns void)
+        * */
+//        postRepository.findById(postId).ifPresent(postToDelete -> postRepository.delete(postToDelete));
+//        return ResponseEntity.ok().build();
     }
 
     @Transactional

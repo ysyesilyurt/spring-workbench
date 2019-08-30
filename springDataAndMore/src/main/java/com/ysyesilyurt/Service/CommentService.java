@@ -40,10 +40,10 @@ public class CommentService {
         return commentRepository.findById(commentId);
     }
 
-    public CommentEntityModel createComment(Long postId, CommentEntityModel commentEntityModel) {
+    public CommentEntityModel createComment(Long postId, CommentEntityModel newComment) {
         return postRepository.findById(postId).map(postEntityModel -> {
-            commentEntityModel.setPost(postEntityModel);
-            return this.persistComment(commentEntityModel);
+            newComment.setPost(postEntityModel);
+            return this.persistComment(newComment);
         }).orElseThrow(() -> new ResourceNotFoundException(String.format("PostId %d not found, " +
                 "could not create Comment under this post.", postId)));
     }
@@ -57,10 +57,10 @@ public class CommentService {
         }
         else {
             /* First way to do it */
-            return commentRepository.findById(commentId).map(commentEntityModel -> {
+            return commentRepository.findById(commentId).map(commentToUpdate -> {
                 // User can not update comment's id and post
-                commentEntityModel.setText(commentUpdatedCredentials.getText());
-                return persistComment(commentEntityModel);
+                commentToUpdate.setText(commentUpdatedCredentials.getText());
+                return persistComment(commentToUpdate);
             }).orElseThrow(() -> new ResourceNotFoundException(String.format("Comment not found with id %d, " +
                     "could not update Comment under this post.", commentId)));
             /* Alternative way */
@@ -76,14 +76,14 @@ public class CommentService {
     @Transactional
     public ResponseEntity<?> deleteComment(Long postId, Long commentId) {
         /* First way to do it */
-        return commentRepository.findById(commentId).map(commentEntityModel -> {
-            commentRepository.delete(commentEntityModel);
+        return commentRepository.findById(commentId).map(commentToDelete -> {
+            commentRepository.delete(commentToDelete);
             return ResponseEntity.ok().build();
         }).orElseThrow(() -> new ResourceNotFoundException(String.format("Comment not found with id %d, " +
                 "could not update Comment under this post.", commentId)));
         /* Alternative way */
-//        return commentRepository.findByIdAndPostId(commentId, postId).map(commentEntityModel -> {
-//            commentRepository.delete(commentEntityModel);
+//        return commentRepository.findByIdAndPostId(commentId, postId).map(commentToDelete -> {
+//            commentRepository.delete(commentToDelete);
 //            return ResponseEntity.ok().build();
 //        }).orElseThrow(() -> new ResourceNotFoundException(String.format("Comment not found with id %d, " +
 //                "could not update Comment under this post.", commentId)));
