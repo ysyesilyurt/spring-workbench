@@ -1,11 +1,14 @@
 package com.ysyesilyurt.EntityModel;
 
+import com.ysyesilyurt.Enum.Category;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -25,9 +28,8 @@ public class PostEntityModel extends AuditModel{
     private String title;
 
     @NotNull
-    @Size(max = 30)
     @Column(name = "category", nullable = false)
-    private String category; // TODO: change category to ENUM
+    private Category category;
 
 
     @Size(max = 300)
@@ -39,7 +41,11 @@ public class PostEntityModel extends AuditModel{
     @Column(name = "content")
     private String content;
 
-    /*
-        TODO: Access Comment also from here -- OneToMany -- .. continued
-     */
+    @OneToMany(cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "post")
+//  @OrderBy("created_at DESC")
+    private Set<CommentEntityModel> comments;
+//    private List<CommentEntityModel> comments;
+
 }

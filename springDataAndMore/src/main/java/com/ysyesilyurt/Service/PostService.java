@@ -1,6 +1,7 @@
 package com.ysyesilyurt.Service;
 
 import com.ysyesilyurt.EntityModel.PostEntityModel;
+import com.ysyesilyurt.Enum.Category;
 import com.ysyesilyurt.Exception.ResourceNotFoundException;
 import com.ysyesilyurt.Repository.PostRepository;
 import org.springframework.data.domain.Page;
@@ -70,6 +71,8 @@ public class PostService {
                 postToUpdate.setContent(postUpdatedCredentials.getContent());
             if (postUpdatedCredentials.getCategory() != null)
                 postToUpdate.setCategory(postUpdatedCredentials.getCategory());
+            if (postUpdatedCredentials.getComments() != null)
+                postToUpdate.setComments(postUpdatedCredentials.getComments());
             return this.persistPost(postToUpdate);
         }).orElseThrow(() -> new ResourceNotFoundException(String.format("PostId %d not found, " +
                 "could not update Post", postId)));

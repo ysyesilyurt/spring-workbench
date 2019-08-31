@@ -1,6 +1,7 @@
 package com.ysyesilyurt.Service;
 
 import com.ysyesilyurt.EntityModel.CommentEntityModel;
+import com.ysyesilyurt.EntityModel.PostEntityModel;
 import com.ysyesilyurt.Exception.ResourceNotFoundException;
 import com.ysyesilyurt.Repository.CommentRepository;
 import com.ysyesilyurt.Repository.PostRepository;
@@ -42,7 +43,10 @@ public class CommentService {
 
     public CommentEntityModel createComment(Long postId, CommentEntityModel newComment) {
         return postRepository.findById(postId).map(postEntityModel -> {
-            newComment.setPost(postEntityModel);
+            newComment.setPost(postEntityModel); /* This line also adds comment to post's comments list !!
+                                                    So we dont need the below lines */
+//            postEntityModel.getComments().add(newComment);
+//            this.persistPost(postEntityModel);
             return this.persistComment(newComment);
         }).orElseThrow(() -> new ResourceNotFoundException(String.format("PostId %d not found, " +
                 "could not create Comment under this post.", postId)));
@@ -92,5 +96,10 @@ public class CommentService {
     @Transactional
     private CommentEntityModel persistComment(CommentEntityModel comment) {
         return commentRepository.save(comment);
+    }
+
+    @Transactional
+    private PostEntityModel persistPost(PostEntityModel post) {
+        return postRepository.save(post);
     }
 }
