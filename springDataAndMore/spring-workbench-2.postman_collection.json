@@ -60,7 +60,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"title\": \"This is my first Post!\",\n\t\"category\": \"Greeting\",\n\t\"description\": \"This is a desc of first post\",\n\t\"content\": \"contenttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt\"\n} "
+							"raw": "{\n\t\"title\": \"This is my first Post!\",\n\t\"category\": 0,\n\t\"description\": \"This is a desc of first post\",\n\t\"content\": \"contenttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt\"\n} "
 						},
 						"url": {
 							"raw": "localhost:8080/posts",
@@ -71,7 +71,8 @@
 							"path": [
 								"posts"
 							]
-						}
+						},
+						"description": "Since category is an enumeration type we could have also used the following:\n\n\"category\": \"Greeting\" or as now \"category\": 0"
 					},
 					"response": []
 				},
