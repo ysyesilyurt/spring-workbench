@@ -2,6 +2,7 @@ package com.ysyesilyurt.Repository;
 
 import com.ysyesilyurt.EntityModel.CommentEntityModel;
 import com.ysyesilyurt.EntityModel.PostEntityModel;
+import com.ysyesilyurt.Enum.Category;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,10 +22,10 @@ public interface PostRepository extends JpaRepository<PostEntityModel, Long> {
        We could have also directly used List<PostEntityModel> or Collection etc.
      */
 
-    Page<PostEntityModel> findByTitleAndCategory(String title, String category, Pageable pageable);
+    Page<PostEntityModel> findByTitleAndCategory(String title, Category category, Pageable pageable);
 
     Page<PostEntityModel> findByTitle(String category, Pageable pageable);
 
     /* Methods that return Page needs a Pageable as argument !! */
-    Page<PostEntityModel> findByCategory(String category, Pageable pageable);
+    Page<PostEntityModel> findByCategory(Category category, Pageable pageable);
 }

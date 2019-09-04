@@ -24,7 +24,7 @@ public class PostService {
         this.postRepository = postRepository;
     }
 
-    public Page<PostEntityModel> getAllPosts(String title, String category, Pageable pageable) {
+    public Page<PostEntityModel> getAllPosts(String title, Category category, Pageable pageable) {
         /* As you can see below code is just nasty ifology and creates method explosion in the repository since the
         *  Optionality of Request Parameters
         *
