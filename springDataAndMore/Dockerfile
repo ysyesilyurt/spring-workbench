@@ -17,12 +17,15 @@ ARG JAR_FILE=target/spring-data-and-more-1.0-SNAPSHOT.jar
 ADD ${JAR_FILE} spring-data-and-more.jar
 
 # Run the jar file
-CMD java -Dspring.profiles.active=dev -jar spring-data-and-more.jar
+ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom","-jar","/spring-data-and-more.jar"]
+
+# Btw i could not see why below ENTRYPOINT does not recognize my active profile, so I had to specify active profile in docker run command:
+# ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom","-Dspring.profiles.active=dev","-jar","/spring-data-and-more.jar"]
 
 # Notice java.security.egd configiuration to Avoid JVM delays caused by random number generation
 # Check https://ruleoftech.com/2016/avoiding-jvm-delays-caused-by-random-number-generation
 
 #######
 # sudo docker build -t spring-data-and-more .
-# sudo docker run --network="host" --rm -d --name workbench-2 spring-data-and-more
+# sudo docker run -e"SPRING_PROFILES_ACTIVE=dev" --network="host" --rm --name workbench-2 spring-data-and-more
 #######
