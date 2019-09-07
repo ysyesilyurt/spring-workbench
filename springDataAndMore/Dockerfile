@@ -27,5 +27,5 @@ ENTRYPOINT ["java", "-Djava.security.egd=file:/dev/./urandom","-jar","/spring-da
 
 #######
 # sudo docker build -t spring-data-and-more .
-# sudo docker run -e"SPRING_PROFILES_ACTIVE=dev" --network="host" --rm --name workbench-2 spring-data-and-more
+# sudo docker run -e"SPRING_PROFILES_ACTIVE=dev" --network="host" -d --rm --name workbench-2 spring-data-and-more
 #######

@@ -13,7 +13,7 @@ Following terms has been practiced:
 ```
 mvn clean package
 sudo docker build -t spring-data-and-more .
-sudo docker run --network="host" --rm -d --name workbench-2 spring-data-and-more
+sudo docker run -e"SPRING_PROFILES_ACTIVE=dev" --network="host" -d --rm --name workbench-2 spring-data-and-more
 ```
 
 * On host machine:
