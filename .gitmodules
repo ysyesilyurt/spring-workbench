@@ -1,0 +1,3 @@
+[submodule "potential-playlist"]
+	path = potential-playlist
+	url = git@github.com:ysyesilyurt/potential-playlist.git
